@@ -1,255 +1,122 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Future Ready 2086: Colony 7</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Future Ready 2086 — Colony Architect</title>
 <style>
-  :root{
-    --bg:#050914; --panel:#0b1426; --panel2:#101f36; --cyan:#5cecff;
-    --green:#62ffb0; --yellow:#ffd85c; --red:#ff6577; --text:#eaf8ff; --muted:#8da7bb;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:radial-gradient(circle at 50% 0,#142745 0,#060b16 48%,#02050b 100%);
-       color:var(--text);font-family:Inter,Arial,sans-serif;overflow:hidden}
-  #app{height:100vh;display:grid;grid-template-rows:72px 1fr 70px}
-  header{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;
-    background:rgba(5,11,24,.94);border-bottom:1px solid #1f7890;box-shadow:0 0 25px #0ce2ff22}
-  .brand{display:flex;gap:13px;align-items:center}.logo{width:46px;height:46px;border:2px solid var(--cyan);
-    border-radius:12px;display:grid;place-items:center;font-weight:900;color:var(--cyan);box-shadow:0 0 18px #5cecff55}
-  .brand h1{font-size:18px;margin:0;letter-spacing:2px}.brand small{color:var(--muted)}
-  .stats{display:flex;gap:12px}.stat{min-width:100px;padding:7px 12px;border:1px solid #1f5266;
-    border-radius:10px;background:#091426;text-align:center}.stat b{display:block;color:var(--cyan);font-size:18px}
-  main{display:grid;grid-template-columns:260px 1fr 285px;min-height:0}
-  aside{padding:15px;background:#07101fdd;border-right:1px solid #173c51;overflow:auto}
-  aside.right{border-right:0;border-left:1px solid #173c51}
-  h2{font-size:13px;letter-spacing:2px;color:var(--cyan);margin:5px 0 12px}
-  .mission{padding:12px;border-radius:10px;background:#0d1b30;border:1px solid #21445b;margin-bottom:10px}
-  .mission.active{border-color:var(--cyan);box-shadow:0 0 12px #5cecff22}.mission.done{border-color:#2f8c67;opacity:.75}
-  .mission strong{display:block;font-size:13px;margin-bottom:5px}.mission span{font-size:11px;color:var(--muted)}
-  #gameWrap{position:relative;min-width:0;min-height:0;background:#02050a}
-  canvas{display:block;width:100%;height:100%;cursor:crosshair}
-  #hint{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);padding:9px 15px;
-    background:#06111de8;border:1px solid var(--cyan);border-radius:8px;color:white;font-size:13px;display:none}
-  .inventory{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .slot{height:72px;border:1px dashed #315a70;border-radius:8px;background:#0a1727;display:flex;
-    align-items:center;justify-content:center;text-align:center;padding:5px;font-size:11px;color:var(--muted)}
-  .slot.filled{border-style:solid;border-color:var(--green);color:white;background:#0b2a27}
-  .log{font-size:11px;color:#a7bfd0;line-height:1.5}.log div{padding:5px 0;border-bottom:1px solid #132a3b}
-  footer{display:flex;align-items:center;gap:18px;padding:8px 20px;background:#06101e;border-top:1px solid #173c51}
-  .bar{height:8px;flex:1;background:#132235;border-radius:10px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#36d8ff,#62ffb0);transition:.5s}
-  button{border:1px solid #39758b;background:#10283a;color:white;border-radius:8px;padding:9px 12px;cursor:pointer}
-  button:hover{border-color:var(--cyan);background:#153a50}
-  .modal{position:fixed;inset:0;background:#01040bd9;display:none;align-items:center;justify-content:center;z-index:20;padding:20px}
-  .modal.open{display:flex}.card{width:min(680px,94vw);max-height:88vh;overflow:auto;background:#09172a;
-    border:1px solid var(--cyan);border-radius:16px;padding:22px;box-shadow:0 0 50px #31dfff33}
-  .card h3{margin-top:0;color:var(--cyan);letter-spacing:1px}.card p,.card li{color:#bcd0dd;line-height:1.5}
-  textarea{width:100%;height:140px;background:#040b15;border:1px solid #315a70;color:white;border-radius:9px;padding:12px;font:14px Arial}
-  .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:15px}.score{font-size:36px;color:var(--green);font-weight:900}
-  .tag{display:inline-block;padding:4px 7px;border:1px solid #315a70;border-radius:6px;margin:3px;font-size:11px}
-  #start{display:flex;background:radial-gradient(circle,#102c4c,#02050b)}
-  .intro{text-align:center;max-width:760px}.intro h1{font-size:44px;letter-spacing:5px;margin:0;color:#eaffff;text-shadow:0 0 25px #39dfff}
-  .intro h4{color:var(--cyan);letter-spacing:5px}.intro p{font-size:17px;line-height:1.6;color:#b7cad6}
-  .intro button{font-size:17px;padding:13px 28px;border-color:var(--cyan)}
-  @media(max-width:900px){main{grid-template-columns:190px 1fr}.right{display:none}.stats .stat:nth-child(n+3){display:none}}
+:root{--bg:#040914;--p:#081526;--p2:#0d2035;--c:#55eaff;--g:#61ffad;--y:#ffd45d;--r:#ff6578;--t:#ecfbff;--m:#8eaabd}
+*{box-sizing:border-box}body{margin:0;background:#030712;color:var(--t);font-family:Arial,sans-serif;overflow:hidden}
+#app{height:100vh;display:grid;grid-template-rows:70px 1fr 64px}
+header{display:flex;align-items:center;justify-content:space-between;padding:8px 18px;background:#06101e;border-bottom:1px solid #1b5269}
+.brand{display:flex;gap:12px;align-items:center}.logo{width:46px;height:46px;border:2px solid var(--c);border-radius:11px;display:grid;place-items:center;color:var(--c);font-weight:bold;box-shadow:0 0 16px #55eaff55}
+h1{font-size:18px;letter-spacing:2px;margin:0}.sub{font-size:11px;color:var(--m);letter-spacing:1px}
+.stats{display:flex;gap:9px}.stat{min-width:88px;text-align:center;border:1px solid #24526a;background:#09192a;border-radius:9px;padding:6px}.stat b{display:block;color:var(--c);font-size:18px}
+main{display:grid;grid-template-columns:250px 1fr 285px;min-height:0}
+aside{background:#06111f;padding:13px;border-right:1px solid #194057;overflow:auto}aside.right{border-right:0;border-left:1px solid #194057}
+h2{font-size:12px;letter-spacing:2px;color:var(--c);margin:7px 0 10px}
+.objective{border:1px solid var(--c);background:#0b2134;border-radius:11px;padding:12px;box-shadow:0 0 18px #55eaff18}
+.objective b{display:block;color:var(--y);font-size:14px;margin-bottom:7px}.objective p{font-size:12px;line-height:1.45;color:#c1d5df;margin:0}
+.step{padding:10px;margin-top:8px;border:1px solid #23455b;border-radius:8px;background:#0a192a;font-size:11px;color:#9eb7c7}.step.done{border-color:#347d62;color:var(--g)}
+#world{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 30%,#112946,#030813 68%);user-select:none}
+canvas{display:block;width:100%;height:100%}
+#toast{position:absolute;top:15px;left:50%;transform:translateX(-50%);padding:9px 14px;background:#071422e8;border:1px solid var(--c);border-radius:8px;display:none;font-size:12px}
+.shop{display:grid;gap:8px}.card{border:1px solid #285168;background:#0a1a2c;border-radius:9px;padding:10px;cursor:pointer;transition:.15s}.card:hover{border-color:var(--c);transform:translateY(-1px)}.card.selected{border-color:var(--y);box-shadow:0 0 12px #ffd45d33}
+.card b{font-size:12px}.card span{display:block;font-size:10px;color:var(--m);margin-top:5px}.cost{color:var(--y)!important}
+.log{font-size:10px;color:#a5bdcc;line-height:1.5}.log div{padding:5px 0;border-bottom:1px solid #142c3e}
+footer{display:flex;align-items:center;gap:15px;padding:8px 18px;background:#06101e;border-top:1px solid #194057;font-size:12px}
+.bar{height:8px;flex:1;background:#112438;border-radius:10px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#4adfff,#61ffad);transition:.4s}
+button{background:#103047;color:white;border:1px solid #347087;border-radius:8px;padding:9px 13px;cursor:pointer}button:hover{border-color:var(--c)}
+.modal{position:fixed;inset:0;background:#01040bdd;display:none;align-items:center;justify-content:center;z-index:30;padding:18px}.modal.open{display:flex}
+.panel{width:min(700px,95vw);max-height:90vh;overflow:auto;background:#08172a;border:1px solid var(--c);border-radius:16px;padding:22px;box-shadow:0 0 50px #40dfff33}
+.panel h3{color:var(--c);letter-spacing:1px}.hero{text-align:center}.hero h3{font-size:15px;letter-spacing:5px}.hero h4{font-size:42px;margin:8px;color:white;text-shadow:0 0 25px #55eaff}
+.panel p,.panel li{color:#bdd0db;line-height:1.5}.panel textarea{width:100%;height:125px;background:#040b15;border:1px solid #315a70;color:white;border-radius:8px;padding:10px}
+.actions{display:flex;justify-content:flex-end;gap:9px;margin-top:15px}.bigscore{font-size:34px;color:var(--g);font-weight:bold}
+.badge{display:inline-block;border:1px solid #315a70;padding:4px 6px;border-radius:5px;font-size:10px;margin:2px}
+#cursorLabel{position:absolute;pointer-events:none;padding:5px 7px;border-radius:5px;background:#06101edb;border:1px solid #36677d;font-size:10px;display:none}
+@media(max-width:900px){main{grid-template-columns:200px 1fr}.right{display:none}}
 </style>
 </head>
 <body>
 <div id="app">
-<header>
-  <div class="brand"><div class="logo">FR</div><div><h1>FUTURE READY 2086</h1><small>COLONY 7 // TRAINING SIMULATION // BUILD 3</small></div></div>
-  <div class="stats"><div class="stat"><b id="energy">20</b>ENERGY</div><div class="stat"><b id="credits">0</b>CREDITS</div><div class="stat"><b id="knowledge">0</b>KNOWLEDGE</div></div>
-</header>
+<header><div class="brand"><div class="logo">FR</div><div><h1>FUTURE READY 2086</h1><div class="sub">COLONY ARCHITECT // BUILD 4</div></div></div>
+<div class="stats"><div class="stat"><b id="credits">500</b>CREDITS</div><div class="stat"><b id="power">0</b>POWER</div><div class="stat"><b id="knowledge">0</b>KNOWLEDGE</div></div></header>
 <main>
 <aside>
-  <h2>MISSION QUEUE</h2>
-  <div id="m1" class="mission active"><strong>01 // RESTORE POWER</strong><span>Recover the battery, cable and solar controller.</span></div>
-  <div id="m2" class="mission"><strong>02 // AI COMMAND</strong><span>Repair the maintenance AI with an effective prompt.</span></div>
-  <div id="m3" class="mission"><strong>03 // OPEN THE GATE</strong><span>Use your restored systems to unlock the colony exit.</span></div>
-  <h2 style="margin-top:22px">CONTROLS</h2>
-  <div class="log"><div>WASD / Arrow Keys — move</div><div>Mouse — select objects</div><div>E / Space — interact nearby</div></div>
+<h2>CURRENT OBJECTIVE</h2><div class="objective"><b id="objTitle">MISSION 01 // POWER THE COLONY</b><p id="objText">Build enough clean-energy infrastructure to produce at least 100 power.</p></div>
+<h2>MISSION PATH</h2>
+<div class="step" id="s1">01 — Establish renewable power</div><div class="step" id="s2">02 — Activate the AI engineer</div><div class="step" id="s3">03 — Construct the learning hub</div><div class="step" id="s4">04 — Colony operational</div>
+<h2>HOW TO PLAY</h2><div class="log"><div>1. Select a structure on the right.</div><div>2. Click an empty construction tile.</div><div>3. Meet the mission requirement.</div><div>4. New systems will unlock.</div></div>
 </aside>
-<div id="gameWrap"><canvas id="game"></canvas><div id="hint"></div></div>
+<div id="world"><canvas id="game"></canvas><div id="toast"></div><div id="cursorLabel"></div></div>
 <aside class="right">
-  <h2>INVENTORY</h2><div class="inventory" id="inventory"></div>
-  <h2 style="margin-top:22px">SYSTEM LOG</h2><div class="log" id="log"><div>06:42 // Emergency protocol initiated.</div><div>06:43 // Colony power at 20%.</div></div>
+<h2>CONSTRUCTION</h2><div class="shop">
+<div class="card" data-build="solar"><b>☀ SOLAR ARRAY</b><span>+35 power</span><span class="cost">Cost: 100 credits</span></div>
+<div class="card" data-build="wind"><b>◉ WIND TURBINE</b><span>+50 power</span><span class="cost">Cost: 150 credits</span></div>
+<div class="card" data-build="battery"><b>▣ BATTERY BANK</b><span>Stores energy • +20 power</span><span class="cost">Cost: 80 credits</span></div>
+<div class="card locked" id="hubCard" data-build="hub" style="opacity:.45"><b>⌂ LEARNING HUB 🔒</b><span>Unlock by repairing AI</span><span class="cost">Cost: 120 credits</span></div>
+</div>
+<h2>COLONY LOG</h2><div id="log" class="log"><div>2086.270 // Architect session initialized.</div><div>Colony site awaiting infrastructure.</div></div>
 </aside>
 </main>
-<footer><b>COLONY RESTORATION</b><div class="bar"><i id="progress"></i></div><span id="pct">0%</span><button id="resetBtn" type="button">RESET</button></footer>
+<footer><b>COLONY DEVELOPMENT</b><div class="bar"><i id="progress"></i></div><span id="pct">0%</span><button id="aiBtn" style="display:none">AI TERMINAL</button><button id="reset">RESET</button></footer>
 </div>
 
-<div class="modal open" id="start">
- <div class="intro"><h4>YEAR 2086</h4><h1>COLONY 7</h1>
- <p>A solar storm has disabled the colony's automated systems. Your team must restore power, repair the AI command system, and reopen the colony gate.</p>
- <p><b>Explore the room.</b> Move close to equipment and interact with it. Look for anything glowing.</p>
- <p style="font-size:13px;color:#8da7bb">Controls: WASD or arrow keys to move • E/Space to interact • You can also click glowing equipment.</p>
- <div id="engineStatus" style="margin:14px auto;color:#ffd85c;font-size:12px;letter-spacing:2px">INITIALIZING GAME ENGINE…</div>
- <button id="beginMissionBtn" type="button">BEGIN MISSION</button></div>
-</div>
+<div class="modal open" id="intro"><div class="panel hero"><h3>YEAR 2086</h3><h4>WELCOME, ARCHITECT</h4><p>Colony 7 has been established, but it cannot support a community yet. Your job is to transform this empty site into a self-sustaining learning colony.</p><p><b>Your first challenge:</b> build a renewable energy system capable of producing at least <span style="color:#ffd45d">100 POWER</span>.</p><p>You have <b>500 construction credits</b>. Your choices matter.</p><button id="begin">ENTER COLONY</button></div></div>
 
-<div class="modal" id="terminal">
- <div class="card"><h3>AI MAINTENANCE TERMINAL</h3>
- <p>The colony AI received this ineffective instruction:</p>
- <p style="padding:10px;background:#050b14;border-left:3px solid var(--red)">"Tell me how to fix the robot."</p>
- <p>Rewrite it as a strong prompt. Include a <b>role</b>, a clear <b>task</b>, useful <b>context</b>, <b>constraints</b>, and the desired <b>output format</b>.</p>
- <div><span class="tag">ROLE</span><span class="tag">TASK</span><span class="tag">CONTEXT</span><span class="tag">CONSTRAINTS</span><span class="tag">OUTPUT</span></div>
- <textarea id="promptText" placeholder="Example: Act as a robotics engineer..."></textarea>
- <div id="promptResult"></div>
- <div class="actions"><button onclick="closeModal('terminal')">CANCEL</button><button onclick="scorePrompt()">ANALYZE PROMPT</button></div>
- </div>
-</div>
+<div class="modal" id="aiModal"><div class="panel"><h3>MISSION 02 // ACTIVATE THE AI ENGINEER</h3>
+<p>The colony's construction AI cannot interpret its current instruction:</p><p style="border-left:3px solid var(--r);padding:10px;background:#050b14">"Help us build a school."</p>
+<p>Create a stronger prompt telling the AI to design a futuristic learning hub. Include a <b>role</b>, <b>task</b>, <b>context</b>, <b>constraints</b>, and desired <b>output</b>.</p>
+<div><span class="badge">ROLE</span><span class="badge">TASK</span><span class="badge">CONTEXT</span><span class="badge">CONSTRAINTS</span><span class="badge">OUTPUT</span></div>
+<textarea id="prompt" placeholder="Act as a sustainable architect..."></textarea><div id="analysis"></div>
+<div class="actions"><button id="closeAI">CLOSE</button><button id="analyze">ANALYZE PROMPT</button></div></div></div>
 
-<div class="modal" id="generator">
- <div class="card"><h3>SOLAR GENERATOR</h3><p id="genText"></p><div class="actions"><button onclick="closeModal('generator')">CLOSE</button><button id="repairBtn" onclick="repairGenerator()">INSTALL COMPONENTS</button></div></div>
-</div>
-
-<div class="modal" id="victory">
- <div class="card" style="text-align:center"><h3>COLONY 7 RESTORED</h3><div style="font-size:70px">◈</div>
- <p>Power is stable. The maintenance AI is online. The colony gate is open.</p><div class="score" id="finalScore">100</div><p>FUTURE READY SCORE</p>
- <button onclick="resetGame()">PLAY AGAIN</button></div>
-</div>
+<div class="modal" id="win"><div class="panel hero"><h3>COLONY STATUS</h3><h4>OPERATIONAL</h4><p>You established clean power, activated the AI engineer, and constructed the colony's first learning hub.</p><div class="bigscore" id="score">100</div><p>FUTURE READY SCORE</p><button onclick="location.reload()">BUILD AGAIN</button></div></div>
 
 <script>
-const canvas=document.getElementById('game'),ctx=canvas.getContext('2d'),wrap=document.getElementById('gameWrap');
-let W=900,H=600,keys={},last=0;
-let state={inventory:[],power:false,ai:false,gate:false,energy:20,credits:0,knowledge:0,promptScore:0};
-let player={x:120,y:480,r:15,speed:210};
-const objects=[
- {id:'battery',name:'Fusion Battery',x:.18,y:.24,w:54,h:44,type:'pickup',icon:'▣'},
- {id:'cable',name:'Power Cable',x:.52,y:.76,w:62,h:26,type:'pickup',icon:'〰'},
- {id:'controller',name:'Solar Controller',x:.76,y:.22,w:58,h:50,type:'pickup',icon:'⌁'},
- {id:'generator',name:'Solar Generator',x:.80,y:.63,w:100,h:86,type:'generator',icon:'⚡'},
- {id:'terminal',name:'AI Terminal',x:.45,y:.27,w:100,h:70,type:'terminal',icon:'AI'},
- {id:'gate',name:'Colony Gate',x:.91,y:.43,w:55,h:145,type:'gate',icon:'⇥'}
-];
-function resize(){const r=wrap.getBoundingClientRect();canvas.width=r.width*devicePixelRatio;canvas.height=r.height*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);W=r.width;H=r.height}
-addEventListener('resize',resize);resize();
-addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if((e.key==='e'||e.key===' ')&&!document.querySelector('.modal.open:not(#start)')) interactNearest()});
-addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
-canvas.addEventListener('click',e=>{const r=canvas.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
- let hit=objects.find(o=>!state.inventory.includes(o.id)&&Math.abs(mx-o.x*W)<o.w/2+15&&Math.abs(my-o.y*H)<o.h/2+15);
- if(hit) interact(hit,true);
-});
-function closeStart(){document.getElementById('start').classList.remove('open');log('Mission started. Search the habitat for power components.')}
-function closeModal(id){document.getElementById(id).classList.remove('open')}
-function log(t){const el=document.getElementById('log'),d=document.createElement('div');d.textContent=new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})+' // '+t;el.prepend(d)}
-function near(o){return Math.hypot(player.x-o.x*W,player.y-o.y*H)<105}
-function interactNearest(){let os=objects.filter(o=>!state.inventory.includes(o.id)&&near(o));if(os.length) interact(os.sort((a,b)=>Math.hypot(player.x-a.x*W,player.y-a.y*H)-Math.hypot(player.x-b.x*W,player.y-b.y*H))[0])}
-function interact(o,mouse=false){
- if(o.type==='pickup'){if(!mouse&&!near(o))return; state.inventory.push(o.id);state.credits+=10;log('Recovered '+o.name+'.');updateUI();return}
- if(!mouse&&!near(o))return;
- if(o.type==='generator'){document.getElementById('generator').classList.add('open');let missing=['battery','cable','controller'].filter(x=>!state.inventory.includes(x));
- document.getElementById('genText').textContent=state.power?'Generator online. Colony power is stable.':missing.length?'Missing components: '+missing.map(x=>objects.find(o=>o.id===x).name).join(', ')+'.':'All components detected. Install them to restore power.';
- document.getElementById('repairBtn').style.display=state.power||missing.length?'none':'inline-block'}
- if(o.type==='terminal'){if(!state.power){log('AI Terminal has no power.');flashHint('RESTORE POWER FIRST');return} if(state.ai){flashHint('AI SYSTEM ONLINE');return} document.getElementById('terminal').classList.add('open')}
- if(o.type==='gate'){if(state.power&&state.ai){state.gate=true;state.credits+=50;log('Colony gate opened. Mission complete.');updateUI();setTimeout(()=>document.getElementById('victory').classList.add('open'),500)}else flashHint('GATE LOCKED — RESTORE POWER + AI')}
+(function(){
+"use strict";
+const C=document.getElementById("game"),X=C.getContext("2d"),world=document.getElementById("world");
+let W=800,H=600,dpr=window.devicePixelRatio||1,selected=null,hover=-1;
+let st={credits:500,power:0,knowledge:0,ai:false,hub:false,builds:[],mission:1};
+const defs={solar:{name:"Solar Array",cost:100,power:35},wind:{name:"Wind Turbine",cost:150,power:50},battery:{name:"Battery Bank",cost:80,power:20},hub:{name:"Learning Hub",cost:120,power:0}};
+const tiles=[]; for(let r=0;r<4;r++)for(let c=0;c<6;c++)tiles.push({c,r,type:null});
+function resize(){let q=world.getBoundingClientRect();W=q.width;H=q.height;C.width=W*dpr;C.height=H*dpr;X.setTransform(dpr,0,0,dpr,0,0)} addEventListener("resize",resize);resize();
+function log(t){let d=document.createElement("div");d.textContent=t;document.getElementById("log").prepend(d)}
+function toast(t){let e=document.getElementById("toast");e.textContent=t;e.style.display="block";clearTimeout(e._t);e._t=setTimeout(()=>e.style.display="none",1800)}
+function tileRect(i){let t=tiles[i],gw=Math.min(W*.82,720),gh=Math.min(H*.68,440),tw=gw/6,th=gh/4,ox=(W-gw)/2,oy=(H-gh)/2+20;return{x:ox+t.c*tw,y:oy+t.r*th,w:tw,h:th}}
+function update(){
+ document.getElementById("credits").textContent=st.credits;document.getElementById("power").textContent=st.power;document.getElementById("knowledge").textContent=st.knowledge;
+ let prog=st.hub?100:st.ai?70:st.power>=100?40:Math.min(35,Math.round(st.power/100*35));document.getElementById("progress").style.width=prog+"%";document.getElementById("pct").textContent=prog+"%";
+ document.getElementById("s1").className="step "+(st.power>=100?"done":"");document.getElementById("s2").className="step "+(st.ai?"done":"");document.getElementById("s3").className="step "+(st.hub?"done":"");document.getElementById("s4").className="step "+(st.hub?"done":"");
+ if(st.power>=100&&!st.ai){st.mission=2;document.getElementById("objTitle").textContent="MISSION 02 // ACTIVATE THE AI ENGINEER";document.getElementById("objText").textContent="Your power grid is online. Open the AI Terminal and create an effective design prompt.";document.getElementById("aiBtn").style.display="inline-block"}
+ if(st.ai&&!st.hub){st.mission=3;document.getElementById("objTitle").textContent="MISSION 03 // BUILD THE LEARNING HUB";document.getElementById("objText").textContent="The AI engineer is online. Select the Learning Hub and place it on an empty construction tile.";document.getElementById("hubCard").style.opacity="1";document.querySelector("#hubCard b").textContent="⌂ LEARNING HUB"}
+ if(st.hub){document.getElementById("objTitle").textContent="COLONY 7 // OPERATIONAL";document.getElementById("objText").textContent="First development phase complete."}
 }
-function repairGenerator(){state.power=true;state.energy=100;state.credits+=30;state.knowledge+=20;closeModal('generator');log('Solar generator restored. AI terminal now available.');updateUI()}
-function scorePrompt(){
- const t=document.getElementById('promptText').value.toLowerCase();let score=0,found=[];
- const tests=[
-  ['ROLE',/(act as|you are|expert|engineer|technician|specialist)/],
-  ['TASK',/(repair|diagnose|fix|troubleshoot|restore|identify)/],
-  ['CONTEXT',/(robot|colony|maintenance|model|system|symptom|power)/],
-  ['CONSTRAINTS',/(must|do not|only|limit|safe|without|constraint|avoid|step)/],
-  ['OUTPUT',/(list|table|steps|checklist|format|bullet|procedure|response)/]
- ];
- tests.forEach(([n,r])=>{if(r.test(t)){score+=20;found.push(n)}});
- if(t.trim().length<50)score=Math.min(score,40);
- document.getElementById('promptResult').innerHTML='<p>Prompt Engineering Score: <span class="score">'+score+'</span>/100</p><p>Detected: '+(found.join(' • ')||'none yet')+'</p>';
- if(score>=80){state.ai=true;state.promptScore=score;state.knowledge+=score;state.credits+=40;log('AI command system restored with a '+score+'/100 prompt.');updateUI();setTimeout(()=>closeModal('terminal'),1000)}
+function drawIcon(type,x,y,w,h){
+ X.save();X.textAlign="center";X.textBaseline="middle";
+ if(type==="solar"){X.fillStyle="#17364a";X.fillRect(x+w*.18,y+h*.30,w*.64,h*.35);X.strokeStyle="#55eaff";for(let k=0;k<4;k++){X.beginPath();X.moveTo(x+w*(.18+k*.16),y+h*.30);X.lineTo(x+w*(.18+k*.16),y+h*.65);X.stroke()}X.fillStyle="#ffd45d";X.beginPath();X.arc(x+w*.78,y+h*.2,7,0,7);X.fill()}
+ if(type==="wind"){X.strokeStyle="#d5f9ff";X.lineWidth=3;X.beginPath();X.moveTo(x+w/2,y+h*.75);X.lineTo(x+w/2,y+h*.35);X.stroke();X.translate(x+w/2,y+h*.34);for(let a=0;a<3;a++){X.rotate(Math.PI*2/3);X.beginPath();X.moveTo(0,0);X.lineTo(0,-h*.23);X.stroke()}}
+ if(type==="battery"){X.fillStyle="#163b36";X.strokeStyle="#61ffad";X.lineWidth=2;X.fillRect(x+w*.28,y+h*.28,w*.44,h*.45);X.strokeRect(x+w*.28,y+h*.28,w*.44,h*.45);X.fillStyle="#61ffad";X.font="bold 22px Arial";X.fillText("⚡",x+w/2,y+h*.51)}
+ if(type==="hub"){X.fillStyle="#173b4d";X.strokeStyle="#55eaff";X.lineWidth=2;X.beginPath();X.moveTo(x+w*.2,y+h*.45);X.lineTo(x+w*.5,y+h*.2);X.lineTo(x+w*.8,y+h*.45);X.lineTo(x+w*.8,y+h*.75);X.lineTo(x+w*.2,y+h*.75);X.closePath();X.fill();X.stroke();X.fillStyle="#61ffad";X.fillRect(x+w*.43,y+h*.52,w*.14,h*.23)}
+ X.restore()
 }
-function updateUI(){
- document.getElementById('energy').textContent=state.energy;document.getElementById('credits').textContent=state.credits;document.getElementById('knowledge').textContent=state.knowledge;
- const inv=document.getElementById('inventory');inv.innerHTML='';
- ['battery','cable','controller','core'].forEach(id=>{let d=document.createElement('div'),o=objects.find(x=>x.id===id);d.className='slot '+(state.inventory.includes(id)?'filled':'');d.textContent=state.inventory.includes(id)?(o?o.name:'AI Core'):'EMPTY SLOT';inv.appendChild(d)});
- let progress=(state.power?45:0)+(state.ai?40:0)+(state.gate?15:0);document.getElementById('progress').style.width=progress+'%';document.getElementById('pct').textContent=progress+'%';
- document.getElementById('m1').className='mission '+(state.power?'done':'active');document.getElementById('m2').className='mission '+(state.ai?'done':state.power?'active':'');document.getElementById('m3').className='mission '+(state.gate?'done':state.ai?'active':'');
- document.getElementById('finalScore').textContent=Math.round((state.promptScore||80)*.6+40);
- localStorage.setItem('futureReady2086',JSON.stringify(state));
-}
-function flashHint(t){let h=document.getElementById('hint');h.textContent=t;h.style.display='block';clearTimeout(h._t);h._t=setTimeout(()=>h.style.display='none',1600)}
-function resetGame(){localStorage.removeItem('futureReady2086');location.reload()}
 function draw(){
- ctx.clearRect(0,0,W,H);
- let g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#0a1830');g.addColorStop(1,'#030914');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
- ctx.strokeStyle='#17344a';ctx.lineWidth=1;
- for(let x=0;x<W;x+=50){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
- for(let y=0;y<H;y+=50){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
- // room fixtures
- ctx.fillStyle='#0b2032';ctx.fillRect(W*.06,H*.08,W*.88,18);ctx.fillRect(W*.06,H*.88,W*.88,18);
- ctx.fillStyle=state.power?'#123e43':'#182331';ctx.fillRect(W*.12,H*.42,W*.25,H*.18);ctx.fillRect(W*.58,H*.40,W*.20,H*.16);
- ctx.fillStyle=state.power?'#5cecff':'#26394a';for(let i=0;i<7;i++)ctx.fillRect(W*(.13+i*.11),H*.10,50,4);
- objects.forEach(o=>{
-  if(state.inventory.includes(o.id))return;
-  let x=o.x*W,y=o.y*H,active=(o.type==='terminal'&&state.power&&!state.ai)||(o.type==='generator'&&!state.power)||(o.type==='gate'&&state.ai)||o.type==='pickup';
-  ctx.save();ctx.shadowBlur=active?22:4;ctx.shadowColor=active?'#5cecff':'#203848';ctx.fillStyle=o.type==='gate'?(state.gate?'#123f32':'#14283c'):'#10283a';
-  ctx.strokeStyle=active?'#5cecff':'#315267';ctx.lineWidth=2;ctx.fillRect(x-o.w/2,y-o.h/2,o.w,o.h);ctx.strokeRect(x-o.w/2,y-o.h/2,o.w,o.h);
-  ctx.shadowBlur=0;ctx.fillStyle=active?'#bff9ff':'#7893a6';ctx.font='bold 15px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(o.icon,x,y);
-  ctx.font='10px Arial';ctx.fillStyle='#9bb4c5';ctx.fillText(o.name.toUpperCase(),x,y+o.h/2+13);ctx.restore();
- });
- // player
- ctx.save();ctx.shadowBlur=18;ctx.shadowColor='#62ffb0';ctx.fillStyle='#62ffb0';ctx.beginPath();ctx.arc(player.x,player.y,player.r,0,Math.PI*2);ctx.fill();
- ctx.shadowBlur=0;ctx.fillStyle='#06120f';ctx.beginPath();ctx.arc(player.x,player.y,7,0,Math.PI*2);ctx.fill();ctx.restore();
- let n=objects.find(o=>!state.inventory.includes(o.id)&&near(o));let h=document.getElementById('hint');
- if(n&&!document.querySelector('.modal.open')){h.textContent='E / SPACE — INTERACT: '+n.name.toUpperCase();h.style.display='block'}else if(!h._t)h.style.display='none';
+ X.clearRect(0,0,W,H);let g=X.createRadialGradient(W/2,H*.35,20,W/2,H*.5,W*.65);g.addColorStop(0,"#102944");g.addColorStop(1,"#030914");X.fillStyle=g;X.fillRect(0,0,W,H);
+ X.fillStyle="#8ba8b7";X.font="bold 12px Arial";X.textAlign="center";X.fillText("COLONY 7 DEVELOPMENT ZONE",W/2,32);
+ tiles.forEach((t,i)=>{let q=tileRect(i);X.fillStyle=i===hover?"#102d42":"#091a2a";X.strokeStyle=i===hover?"#55eaff":"#1d4960";X.lineWidth=i===hover?2:1;X.fillRect(q.x+4,q.y+4,q.w-8,q.h-8);X.strokeRect(q.x+4,q.y+4,q.w-8,q.h-8);if(t.type)drawIcon(t.type,q.x,q.y,q.w,q.h);else{X.fillStyle="#315368";X.font="10px Arial";X.fillText("BUILD SITE",q.x+q.w/2,q.y+q.h/2)}});
+ X.fillStyle="#557485";X.font="10px Arial";X.fillText("Select a structure → click a BUILD SITE to construct",W/2,H-22);
+ requestAnimationFrame(draw)
 }
-function loop(ts){let dt=Math.min((ts-last)/1000,.03);last=ts;if(!document.querySelector('.modal.open')){
- let dx=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0),dy=(keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0);
- if(dx||dy){let l=Math.hypot(dx,dy);player.x+=dx/l*player.speed*dt;player.y+=dy/l*player.speed*dt;player.x=Math.max(25,Math.min(W-25,player.x));player.y=Math.max(25,Math.min(H-25,player.y))}
- } draw();requestAnimationFrame(loop)}
-
-// ---- Defensive startup / Firefox + Chrome compatible ----
-function showFatalError(message){
-  var status = document.getElementById('engineStatus');
-  if(status){
-    status.style.color='#ff6577';
-    status.textContent='GAME ERROR: '+message;
-  }
-}
-window.addEventListener('error', function(ev){
-  showFatalError(ev.message || 'Unknown JavaScript error');
-});
-
-function beginMission(){
-  var intro = document.getElementById('start');
-  if(intro) intro.style.display='none';
-  try {
-    canvas.focus();
-    log('Mission started. Search the habitat for power components.');
-  } catch(err) {
-    console.error(err);
-  }
-}
-
-(function boot(){
-  try{
-    var begin = document.getElementById('beginMissionBtn');
-    var reset = document.getElementById('resetBtn');
-    if(!begin) throw new Error('Begin Mission button not found');
-    begin.onclick = function(ev){
-      if(ev) ev.preventDefault();
-      beginMission();
-      return false;
-    };
-    if(reset) reset.onclick = function(ev){
-      if(ev) ev.preventDefault();
-      resetGame();
-      return false;
-    };
-    canvas.setAttribute('tabindex','0');
-    updateUI();
-    var status=document.getElementById('engineStatus');
-    if(status){
-      status.style.color='#62ffb0';
-      status.textContent='● GAME ENGINE READY';
-    }
-    requestAnimationFrame(loop);
-  }catch(err){
-    console.error(err);
-    showFatalError(err.message || String(err));
-  }
+document.querySelectorAll(".card").forEach(el=>el.addEventListener("click",()=>{let type=el.dataset.build;if(type==="hub"&&!st.ai){toast("LEARNING HUB LOCKED — COMPLETE AI MISSION");return}selected=type;document.querySelectorAll(".card").forEach(x=>x.classList.remove("selected"));el.classList.add("selected");toast("SELECT A BUILD SITE FOR "+defs[type].name.toUpperCase())}));
+C.addEventListener("mousemove",e=>{let r=C.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;hover=-1;tiles.forEach((t,i)=>{let q=tileRect(i);if(mx>q.x&&mx<q.x+q.w&&my>q.y&&my<q.y+q.h)hover=i})});
+C.addEventListener("mouseleave",()=>hover=-1);
+C.addEventListener("click",()=>{if(hover<0||!selected)return;let t=tiles[hover],d=defs[selected];if(t.type){toast("THAT SITE IS ALREADY OCCUPIED");return}if(st.credits<d.cost){toast("NOT ENOUGH CREDITS");return}t.type=selected;st.credits-=d.cost;st.power+=d.power;st.builds.push(selected);log("Constructed "+d.name+" // -"+d.cost+" credits");if(selected==="hub"){st.hub=true;st.knowledge+=30;log("Learning Hub online.");setTimeout(()=>document.getElementById("win").classList.add("open"),700)}selected=null;document.querySelectorAll(".card").forEach(x=>x.classList.remove("selected"));if(st.power>=100&&st.mission===1){log("Renewable grid requirement achieved.");toast("MISSION 01 COMPLETE — AI TERMINAL UNLOCKED")}update()});
+document.getElementById("begin").onclick=()=>{document.getElementById("intro").classList.remove("open");toast("MISSION 01: BUILD 100 POWER")};
+document.getElementById("reset").onclick=()=>location.reload();
+document.getElementById("aiBtn").onclick=()=>document.getElementById("aiModal").classList.add("open");
+document.getElementById("closeAI").onclick=()=>document.getElementById("aiModal").classList.remove("open");
+document.getElementById("analyze").onclick=()=>{let t=document.getElementById("prompt").value.toLowerCase(),score=0,found=[];let tests=[["ROLE",/(act as|you are|architect|designer|engineer|expert)/],["TASK",/(design|create|plan|build|develop)/],["CONTEXT",/(colony|2086|student|learning|school|community|future)/],["CONSTRAINTS",/(must|include|limit|budget|sustainable|accessible|safe|constraint|energy)/],["OUTPUT",/(list|table|plan|steps|layout|blueprint|format|proposal)/]];tests.forEach(a=>{if(a[1].test(t)){score+=20;found.push(a[0])}});if(t.trim().length<60)score=Math.min(score,60);document.getElementById("analysis").innerHTML='<p>Prompt score: <span class="bigscore">'+score+'</span>/100</p><p>Detected: '+(found.join(" • ")||"none")+'</p>';if(score>=80&&!st.ai){st.ai=true;st.knowledge+=score;log("AI Engineer activated // prompt score "+score);toast("MISSION 02 COMPLETE — LEARNING HUB UNLOCKED");update();setTimeout(()=>document.getElementById("aiModal").classList.remove("open"),1100)}};
+update();requestAnimationFrame(draw);
 })();
 </script>
-</body>
-</html>
+</body></html>
