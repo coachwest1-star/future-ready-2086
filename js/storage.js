@@ -1,0 +1,1 @@
+window.FR={get(){try{return JSON.parse(localStorage.getItem("futureReady2086"))||{}}catch(e){return{}}},save(v){localStorage.setItem("futureReady2086",JSON.stringify(v))},patch(v){this.save(Object.assign(this.get(),v))},reset(){localStorage.removeItem("futureReady2086")}};
