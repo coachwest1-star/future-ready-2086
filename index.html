@@ -2,121 +2,92 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Future Ready 2086 — Colony Architect</title>
+<title>Future Ready 2086 — CTE Career Simulation</title>
 <style>
-:root{--bg:#040914;--p:#081526;--p2:#0d2035;--c:#55eaff;--g:#61ffad;--y:#ffd45d;--r:#ff6578;--t:#ecfbff;--m:#8eaabd}
-*{box-sizing:border-box}body{margin:0;background:#030712;color:var(--t);font-family:Arial,sans-serif;overflow:hidden}
-#app{height:100vh;display:grid;grid-template-rows:70px 1fr 64px}
-header{display:flex;align-items:center;justify-content:space-between;padding:8px 18px;background:#06101e;border-bottom:1px solid #1b5269}
-.brand{display:flex;gap:12px;align-items:center}.logo{width:46px;height:46px;border:2px solid var(--c);border-radius:11px;display:grid;place-items:center;color:var(--c);font-weight:bold;box-shadow:0 0 16px #55eaff55}
+:root{--bg:#030712;--p:#081526;--p2:#0d2035;--c:#56eaff;--g:#62ffad;--y:#ffd45d;--r:#ff6578;--t:#effcff;--m:#91aabd}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% 0,#112744,#030712 55%);color:var(--t);font-family:Arial,sans-serif;min-height:100vh}
+button{font:inherit}.screen{display:none;min-height:100vh}.screen.active{display:block}
+.top{height:72px;display:flex;align-items:center;justify-content:space-between;padding:10px 22px;background:#06101eee;border-bottom:1px solid #1d5269;position:sticky;top:0;z-index:5}
+.brand{display:flex;gap:12px;align-items:center}.logo{width:48px;height:48px;border:2px solid var(--c);border-radius:12px;display:grid;place-items:center;color:var(--c);font-weight:900;box-shadow:0 0 18px #56eaff44}
 h1{font-size:18px;letter-spacing:2px;margin:0}.sub{font-size:11px;color:var(--m);letter-spacing:1px}
-.stats{display:flex;gap:9px}.stat{min-width:88px;text-align:center;border:1px solid #24526a;background:#09192a;border-radius:9px;padding:6px}.stat b{display:block;color:var(--c);font-size:18px}
-main{display:grid;grid-template-columns:250px 1fr 285px;min-height:0}
-aside{background:#06111f;padding:13px;border-right:1px solid #194057;overflow:auto}aside.right{border-right:0;border-left:1px solid #194057}
-h2{font-size:12px;letter-spacing:2px;color:var(--c);margin:7px 0 10px}
-.objective{border:1px solid var(--c);background:#0b2134;border-radius:11px;padding:12px;box-shadow:0 0 18px #55eaff18}
-.objective b{display:block;color:var(--y);font-size:14px;margin-bottom:7px}.objective p{font-size:12px;line-height:1.45;color:#c1d5df;margin:0}
-.step{padding:10px;margin-top:8px;border:1px solid #23455b;border-radius:8px;background:#0a192a;font-size:11px;color:#9eb7c7}.step.done{border-color:#347d62;color:var(--g)}
-#world{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 30%,#112946,#030813 68%);user-select:none}
-canvas{display:block;width:100%;height:100%}
-#toast{position:absolute;top:15px;left:50%;transform:translateX(-50%);padding:9px 14px;background:#071422e8;border:1px solid var(--c);border-radius:8px;display:none;font-size:12px}
-.shop{display:grid;gap:8px}.card{border:1px solid #285168;background:#0a1a2c;border-radius:9px;padding:10px;cursor:pointer;transition:.15s}.card:hover{border-color:var(--c);transform:translateY(-1px)}.card.selected{border-color:var(--y);box-shadow:0 0 12px #ffd45d33}
-.card b{font-size:12px}.card span{display:block;font-size:10px;color:var(--m);margin-top:5px}.cost{color:var(--y)!important}
-.log{font-size:10px;color:#a5bdcc;line-height:1.5}.log div{padding:5px 0;border-bottom:1px solid #142c3e}
-footer{display:flex;align-items:center;gap:15px;padding:8px 18px;background:#06101e;border-top:1px solid #194057;font-size:12px}
-.bar{height:8px;flex:1;background:#112438;border-radius:10px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#4adfff,#61ffad);transition:.4s}
-button{background:#103047;color:white;border:1px solid #347087;border-radius:8px;padding:9px 13px;cursor:pointer}button:hover{border-color:var(--c)}
-.modal{position:fixed;inset:0;background:#01040bdd;display:none;align-items:center;justify-content:center;z-index:30;padding:18px}.modal.open{display:flex}
-.panel{width:min(700px,95vw);max-height:90vh;overflow:auto;background:#08172a;border:1px solid var(--c);border-radius:16px;padding:22px;box-shadow:0 0 50px #40dfff33}
-.panel h3{color:var(--c);letter-spacing:1px}.hero{text-align:center}.hero h3{font-size:15px;letter-spacing:5px}.hero h4{font-size:42px;margin:8px;color:white;text-shadow:0 0 25px #55eaff}
-.panel p,.panel li{color:#bdd0db;line-height:1.5}.panel textarea{width:100%;height:125px;background:#040b15;border:1px solid #315a70;color:white;border-radius:8px;padding:10px}
-.actions{display:flex;justify-content:flex-end;gap:9px;margin-top:15px}.bigscore{font-size:34px;color:var(--g);font-weight:bold}
-.badge{display:inline-block;border:1px solid #315a70;padding:4px 6px;border-radius:5px;font-size:10px;margin:2px}
-#cursorLabel{position:absolute;pointer-events:none;padding:5px 7px;border-radius:5px;background:#06101edb;border:1px solid #36677d;font-size:10px;display:none}
-@media(max-width:900px){main{grid-template-columns:200px 1fr}.right{display:none}}
+.stats{display:flex;gap:8px}.stat{min-width:92px;text-align:center;padding:6px 10px;background:#09192a;border:1px solid #24526a;border-radius:9px}.stat b{display:block;color:var(--c);font-size:18px}
+.hero{max-width:1050px;margin:0 auto;padding:55px 24px;text-align:center}.hero h2{font-size:44px;letter-spacing:4px;margin:10px 0;text-shadow:0 0 25px #56eaff44}.hero p{max-width:800px;margin:12px auto;color:#bdd1dd;line-height:1.6}
+.primary{background:#10334a;color:white;border:1px solid var(--c);border-radius:9px;padding:12px 20px;cursor:pointer}.primary:hover{background:#17465f}
+.careers{max-width:1050px;margin:25px auto;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.career{background:#09192b;border:1px solid #275168;border-radius:14px;padding:18px;text-align:left;cursor:pointer;transition:.15s}.career:hover{border-color:var(--c);transform:translateY(-3px);box-shadow:0 0 22px #56eaff18}.career .icon{font-size:34px}.career h3{color:var(--c);margin:10px 0 6px;font-size:15px}.career p{font-size:12px;color:#9fb8c8;line-height:1.45}
+.lesson{max-width:1150px;margin:0 auto;padding:25px;display:grid;grid-template-columns:250px 1fr 260px;gap:14px}
+.panel{background:#071526;border:1px solid #21475d;border-radius:12px;padding:15px}.panel h3{font-size:12px;color:var(--c);letter-spacing:2px;margin-top:0}.objective{border-color:var(--c);box-shadow:0 0 16px #56eaff18}.objective strong{color:var(--y);display:block;margin-bottom:8px}.objective p,.small{font-size:12px;line-height:1.5;color:#b8ceda}
+.evidence{padding:10px;border:1px solid #2a5268;border-radius:8px;margin:8px 0;background:#0b1c2e;cursor:pointer}.evidence:hover{border-color:var(--c)}.evidence.seen{border-color:#3d8c6b;background:#0b2928}.evidence b{font-size:12px}.evidence span{display:block;color:#92acbc;font-size:10px;margin-top:4px}
+.workspace{min-height:570px}.jobcard{background:linear-gradient(135deg,#102a40,#0a1728);border:1px solid #326077;border-radius:12px;padding:16px;margin-bottom:12px}.jobcard h2{margin:0 0 7px;font-size:20px}.jobcard p{color:#bdd1dd;line-height:1.5;font-size:13px}
+.ai{border:1px solid #315b72;border-radius:12px;overflow:hidden}.aihead{padding:10px 13px;background:#10283b;color:var(--c);font-size:12px;font-weight:bold}.chat{padding:13px;min-height:140px;background:#050d18}.bubble{max-width:88%;padding:9px 11px;border-radius:9px;margin:7px 0;font-size:12px;line-height:1.45}.bot{background:#10283b}.user{background:#12362f;margin-left:auto}.warning{color:var(--y);font-size:11px;margin:8px 0}
+textarea{width:100%;height:100px;background:#030a13;color:white;border:1px solid #315b72;border-radius:8px;padding:10px;resize:vertical}.row{display:flex;gap:8px;margin-top:8px}.row button,.decision button{flex:1;background:#10283b;color:white;border:1px solid #35677e;border-radius:8px;padding:9px;cursor:pointer}.row button:hover,.decision button:hover{border-color:var(--c)}
+.decision{margin-top:15px;padding-top:13px;border-top:1px solid #24465a}.decision h3{color:var(--y);font-size:13px}.decision button{display:block;width:100%;margin:7px 0;text-align:left}.decision button.correct{border-color:var(--g)}
+.skill{margin:10px 0;font-size:11px}.skillline{height:7px;background:#102235;border-radius:10px;overflow:hidden;margin-top:4px}.skillline i{display:block;height:100%;background:linear-gradient(90deg,#52ddff,#62ffad);width:0;transition:.5s}
+#debrief{position:fixed;inset:0;background:#01040be8;display:none;align-items:center;justify-content:center;z-index:20;padding:20px}#debrief.open{display:flex}.report{width:min(720px,95vw);background:#08172a;border:1px solid var(--c);border-radius:16px;padding:24px;box-shadow:0 0 50px #56eaff33}.report h2{color:var(--c);letter-spacing:2px}.scores{display:grid;grid-template-columns:1fr 1fr;gap:10px}.scorebox{background:#0c2033;border:1px solid #295268;border-radius:9px;padding:12px}.scorebox b{font-size:25px;color:var(--g);display:block}.reportmsg{padding:12px;border-left:3px solid var(--y);background:#0c1b2b;margin:14px 0;color:#c5d7df;font-size:13px;line-height:1.5}
+@media(max-width:900px){.careers{grid-template-columns:1fr 1fr}.lesson{grid-template-columns:1fr}.stats{display:none}}
 </style>
 </head>
 <body>
-<div id="app">
-<header><div class="brand"><div class="logo">FR</div><div><h1>FUTURE READY 2086</h1><div class="sub">COLONY ARCHITECT // BUILD 4</div></div></div>
-<div class="stats"><div class="stat"><b id="credits">500</b>CREDITS</div><div class="stat"><b id="power">0</b>POWER</div><div class="stat"><b id="knowledge">0</b>KNOWLEDGE</div></div></header>
-<main>
-<aside>
-<h2>CURRENT OBJECTIVE</h2><div class="objective"><b id="objTitle">MISSION 01 // POWER THE COLONY</b><p id="objText">Build enough clean-energy infrastructure to produce at least 100 power.</p></div>
-<h2>MISSION PATH</h2>
-<div class="step" id="s1">01 — Establish renewable power</div><div class="step" id="s2">02 — Activate the AI engineer</div><div class="step" id="s3">03 — Construct the learning hub</div><div class="step" id="s4">04 — Colony operational</div>
-<h2>HOW TO PLAY</h2><div class="log"><div>1. Select a structure on the right.</div><div>2. Click an empty construction tile.</div><div>3. Meet the mission requirement.</div><div>4. New systems will unlock.</div></div>
-</aside>
-<div id="world"><canvas id="game"></canvas><div id="toast"></div><div id="cursorLabel"></div></div>
-<aside class="right">
-<h2>CONSTRUCTION</h2><div class="shop">
-<div class="card" data-build="solar"><b>☀ SOLAR ARRAY</b><span>+35 power</span><span class="cost">Cost: 100 credits</span></div>
-<div class="card" data-build="wind"><b>◉ WIND TURBINE</b><span>+50 power</span><span class="cost">Cost: 150 credits</span></div>
-<div class="card" data-build="battery"><b>▣ BATTERY BANK</b><span>Stores energy • +20 power</span><span class="cost">Cost: 80 credits</span></div>
-<div class="card locked" id="hubCard" data-build="hub" style="opacity:.45"><b>⌂ LEARNING HUB 🔒</b><span>Unlock by repairing AI</span><span class="cost">Cost: 120 credits</span></div>
+<section id="home" class="screen active">
+<div class="top"><div class="brand"><div class="logo">FR</div><div><h1>FUTURE READY 2086</h1><div class="sub">CTE CAREER SIMULATION // BUILD 5</div></div></div><div class="sub">CAREER SKILL + AI SKILL + HUMAN JUDGMENT</div></div>
+<div class="hero"><div class="sub">WELCOME TO THE FUTURE READY CAREER CENTER</div><h2>YOUR CAREER STARTS NOW.</h2><p>AI can analyze, calculate, write, design and recommend. But the professional is still responsible for the final decision. Choose a career division and solve a realistic workplace problem using technical evidence, AI assistance, and your own judgment.</p>
+<div class="careers">
+<div class="career" data-career="auto"><div class="icon">⚙️</div><h3>TRANSPORTATION</h3><p>Diagnose an electric vehicle fault without replacing parts unnecessarily.</p></div>
+<div class="career" data-career="construction"><div class="icon">🏗️</div><h3>CONSTRUCTION & TRADES</h3><p>Plan a safe electrical installation using specifications and project constraints.</p></div>
+<div class="career" data-career="business"><div class="icon">📊</div><h3>BUSINESS & ENTREPRENEURSHIP</h3><p>Make a marketing decision without publishing unsupported AI-generated claims.</p></div>
+<div class="career" data-career="ag"><div class="icon">🌱</div><h3>AGRICULTURE</h3><p>Diagnose a greenhouse production problem using sensor data and evidence.</p></div>
+</div></div>
+</section>
+
+<section id="sim" class="screen">
+<div class="top"><div class="brand"><div class="logo">FR</div><div><h1 id="careerTitle">CAREER DIVISION</h1><div class="sub">WORK ORDER // 2086</div></div></div><div class="stats"><div class="stat"><b id="xp">0</b>CAREER XP</div><div class="stat"><b id="evcount">0/3</b>EVIDENCE</div></div></div>
+<div class="lesson">
+<div>
+<div class="panel objective"><h3>CURRENT OBJECTIVE</h3><strong id="objectiveTitle"></strong><p id="objective"></p></div>
+<div class="panel" style="margin-top:12px"><h3>WORKPLACE EVIDENCE</h3><div id="evidence"></div><p class="small">Good professionals gather evidence before making decisions.</p></div>
 </div>
-<h2>COLONY LOG</h2><div id="log" class="log"><div>2086.270 // Architect session initialized.</div><div>Colony site awaiting infrastructure.</div></div>
-</aside>
-</main>
-<footer><b>COLONY DEVELOPMENT</b><div class="bar"><i id="progress"></i></div><span id="pct">0%</span><button id="aiBtn" style="display:none">AI TERMINAL</button><button id="reset">RESET</button></footer>
+<div class="panel workspace">
+<div class="jobcard"><div class="sub" id="role"></div><h2 id="jobTitle"></h2><p id="scenario"></p></div>
+<div class="ai"><div class="aihead">◈ CAREER AI ASSISTANT</div><div class="chat" id="chat"><div class="bubble bot">I can help analyze the problem, but I only know what you tell me. Gather evidence and give me the relevant details.</div></div><div style="padding:12px;background:#081525"><textarea id="prompt" placeholder="Write your request to the AI assistant..."></textarea><div class="row"><button id="hint">PROMPT COACH</button><button id="ask">ASK AI</button></div><div id="promptfeedback" class="warning"></div></div></div>
+<div class="decision"><h3>YOUR PROFESSIONAL DECISION</h3><div id="choices"></div></div>
 </div>
+<div>
+<div class="panel"><h3>FUTURE READY SKILLS</h3>
+<div class="skill">TECHNICAL ACCURACY<div class="skillline"><i id="techbar"></i></div></div>
+<div class="skill">AI COMMUNICATION<div class="skillline"><i id="aibar"></i></div></div>
+<div class="skill">VERIFICATION<div class="skillline"><i id="verifybar"></i></div></div>
+<div class="skill">PROFESSIONAL JUDGMENT<div class="skillline"><i id="judgebar"></i></div></div>
+</div>
+<div class="panel" style="margin-top:12px"><h3>THE RULE</h3><p class="small" style="font-size:14px;color:#eafaff"><b style="color:var(--y)">YOU</b> are responsible for the final decision — not the AI.</p><button id="back" style="width:100%">CHANGE CAREER</button></div>
+</div></div>
+</section>
 
-<div class="modal open" id="intro"><div class="panel hero"><h3>YEAR 2086</h3><h4>WELCOME, ARCHITECT</h4><p>Colony 7 has been established, but it cannot support a community yet. Your job is to transform this empty site into a self-sustaining learning colony.</p><p><b>Your first challenge:</b> build a renewable energy system capable of producing at least <span style="color:#ffd45d">100 POWER</span>.</p><p>You have <b>500 construction credits</b>. Your choices matter.</p><button id="begin">ENTER COLONY</button></div></div>
-
-<div class="modal" id="aiModal"><div class="panel"><h3>MISSION 02 // ACTIVATE THE AI ENGINEER</h3>
-<p>The colony's construction AI cannot interpret its current instruction:</p><p style="border-left:3px solid var(--r);padding:10px;background:#050b14">"Help us build a school."</p>
-<p>Create a stronger prompt telling the AI to design a futuristic learning hub. Include a <b>role</b>, <b>task</b>, <b>context</b>, <b>constraints</b>, and desired <b>output</b>.</p>
-<div><span class="badge">ROLE</span><span class="badge">TASK</span><span class="badge">CONTEXT</span><span class="badge">CONSTRAINTS</span><span class="badge">OUTPUT</span></div>
-<textarea id="prompt" placeholder="Act as a sustainable architect..."></textarea><div id="analysis"></div>
-<div class="actions"><button id="closeAI">CLOSE</button><button id="analyze">ANALYZE PROMPT</button></div></div></div>
-
-<div class="modal" id="win"><div class="panel hero"><h3>COLONY STATUS</h3><h4>OPERATIONAL</h4><p>You established clean power, activated the AI engineer, and constructed the colony's first learning hub.</p><div class="bigscore" id="score">100</div><p>FUTURE READY SCORE</p><button onclick="location.reload()">BUILD AGAIN</button></div></div>
+<div id="debrief"><div class="report"><div class="sub">CAREER PERFORMANCE REPORT</div><h2 id="reportTitle">MISSION COMPLETE</h2><div class="scores">
+<div class="scorebox"><b id="rtech">0%</b>Technical Accuracy</div><div class="scorebox"><b id="rai">0%</b>AI Communication</div><div class="scorebox"><b id="rverify">0%</b>Verification</div><div class="scorebox"><b id="rjudge">0%</b>Professional Judgment</div></div><div class="reportmsg" id="reportmsg"></div><div class="row"><button id="retry">TRY THIS CAREER AGAIN</button><button id="careerCenter" class="primary">CAREER CENTER</button></div></div></div>
 
 <script>
 (function(){
 "use strict";
-const C=document.getElementById("game"),X=C.getContext("2d"),world=document.getElementById("world");
-let W=800,H=600,dpr=window.devicePixelRatio||1,selected=null,hover=-1;
-let st={credits:500,power:0,knowledge:0,ai:false,hub:false,builds:[],mission:1};
-const defs={solar:{name:"Solar Array",cost:100,power:35},wind:{name:"Wind Turbine",cost:150,power:50},battery:{name:"Battery Bank",cost:80,power:20},hub:{name:"Learning Hub",cost:120,power:0}};
-const tiles=[]; for(let r=0;r<4;r++)for(let c=0;c<6;c++)tiles.push({c,r,type:null});
-function resize(){let q=world.getBoundingClientRect();W=q.width;H=q.height;C.width=W*dpr;C.height=H*dpr;X.setTransform(dpr,0,0,dpr,0,0)} addEventListener("resize",resize);resize();
-function log(t){let d=document.createElement("div");d.textContent=t;document.getElementById("log").prepend(d)}
-function toast(t){let e=document.getElementById("toast");e.textContent=t;e.style.display="block";clearTimeout(e._t);e._t=setTimeout(()=>e.style.display="none",1800)}
-function tileRect(i){let t=tiles[i],gw=Math.min(W*.82,720),gh=Math.min(H*.68,440),tw=gw/6,th=gh/4,ox=(W-gw)/2,oy=(H-gh)/2+20;return{x:ox+t.c*tw,y:oy+t.r*th,w:tw,h:th}}
-function update(){
- document.getElementById("credits").textContent=st.credits;document.getElementById("power").textContent=st.power;document.getElementById("knowledge").textContent=st.knowledge;
- let prog=st.hub?100:st.ai?70:st.power>=100?40:Math.min(35,Math.round(st.power/100*35));document.getElementById("progress").style.width=prog+"%";document.getElementById("pct").textContent=prog+"%";
- document.getElementById("s1").className="step "+(st.power>=100?"done":"");document.getElementById("s2").className="step "+(st.ai?"done":"");document.getElementById("s3").className="step "+(st.hub?"done":"");document.getElementById("s4").className="step "+(st.hub?"done":"");
- if(st.power>=100&&!st.ai){st.mission=2;document.getElementById("objTitle").textContent="MISSION 02 // ACTIVATE THE AI ENGINEER";document.getElementById("objText").textContent="Your power grid is online. Open the AI Terminal and create an effective design prompt.";document.getElementById("aiBtn").style.display="inline-block"}
- if(st.ai&&!st.hub){st.mission=3;document.getElementById("objTitle").textContent="MISSION 03 // BUILD THE LEARNING HUB";document.getElementById("objText").textContent="The AI engineer is online. Select the Learning Hub and place it on an empty construction tile.";document.getElementById("hubCard").style.opacity="1";document.querySelector("#hubCard b").textContent="⌂ LEARNING HUB"}
- if(st.hub){document.getElementById("objTitle").textContent="COLONY 7 // OPERATIONAL";document.getElementById("objText").textContent="First development phase complete."}
-}
-function drawIcon(type,x,y,w,h){
- X.save();X.textAlign="center";X.textBaseline="middle";
- if(type==="solar"){X.fillStyle="#17364a";X.fillRect(x+w*.18,y+h*.30,w*.64,h*.35);X.strokeStyle="#55eaff";for(let k=0;k<4;k++){X.beginPath();X.moveTo(x+w*(.18+k*.16),y+h*.30);X.lineTo(x+w*(.18+k*.16),y+h*.65);X.stroke()}X.fillStyle="#ffd45d";X.beginPath();X.arc(x+w*.78,y+h*.2,7,0,7);X.fill()}
- if(type==="wind"){X.strokeStyle="#d5f9ff";X.lineWidth=3;X.beginPath();X.moveTo(x+w/2,y+h*.75);X.lineTo(x+w/2,y+h*.35);X.stroke();X.translate(x+w/2,y+h*.34);for(let a=0;a<3;a++){X.rotate(Math.PI*2/3);X.beginPath();X.moveTo(0,0);X.lineTo(0,-h*.23);X.stroke()}}
- if(type==="battery"){X.fillStyle="#163b36";X.strokeStyle="#61ffad";X.lineWidth=2;X.fillRect(x+w*.28,y+h*.28,w*.44,h*.45);X.strokeRect(x+w*.28,y+h*.28,w*.44,h*.45);X.fillStyle="#61ffad";X.font="bold 22px Arial";X.fillText("⚡",x+w/2,y+h*.51)}
- if(type==="hub"){X.fillStyle="#173b4d";X.strokeStyle="#55eaff";X.lineWidth=2;X.beginPath();X.moveTo(x+w*.2,y+h*.45);X.lineTo(x+w*.5,y+h*.2);X.lineTo(x+w*.8,y+h*.45);X.lineTo(x+w*.8,y+h*.75);X.lineTo(x+w*.2,y+h*.75);X.closePath();X.fill();X.stroke();X.fillStyle="#61ffad";X.fillRect(x+w*.43,y+h*.52,w*.14,h*.23)}
- X.restore()
-}
-function draw(){
- X.clearRect(0,0,W,H);let g=X.createRadialGradient(W/2,H*.35,20,W/2,H*.5,W*.65);g.addColorStop(0,"#102944");g.addColorStop(1,"#030914");X.fillStyle=g;X.fillRect(0,0,W,H);
- X.fillStyle="#8ba8b7";X.font="bold 12px Arial";X.textAlign="center";X.fillText("COLONY 7 DEVELOPMENT ZONE",W/2,32);
- tiles.forEach((t,i)=>{let q=tileRect(i);X.fillStyle=i===hover?"#102d42":"#091a2a";X.strokeStyle=i===hover?"#55eaff":"#1d4960";X.lineWidth=i===hover?2:1;X.fillRect(q.x+4,q.y+4,q.w-8,q.h-8);X.strokeRect(q.x+4,q.y+4,q.w-8,q.h-8);if(t.type)drawIcon(t.type,q.x,q.y,q.w,q.h);else{X.fillStyle="#315368";X.font="10px Arial";X.fillText("BUILD SITE",q.x+q.w/2,q.y+q.h/2)}});
- X.fillStyle="#557485";X.font="10px Arial";X.fillText("Select a structure → click a BUILD SITE to construct",W/2,H-22);
- requestAnimationFrame(draw)
-}
-document.querySelectorAll(".card").forEach(el=>el.addEventListener("click",()=>{let type=el.dataset.build;if(type==="hub"&&!st.ai){toast("LEARNING HUB LOCKED — COMPLETE AI MISSION");return}selected=type;document.querySelectorAll(".card").forEach(x=>x.classList.remove("selected"));el.classList.add("selected");toast("SELECT A BUILD SITE FOR "+defs[type].name.toUpperCase())}));
-C.addEventListener("mousemove",e=>{let r=C.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;hover=-1;tiles.forEach((t,i)=>{let q=tileRect(i);if(mx>q.x&&mx<q.x+q.w&&my>q.y&&my<q.y+q.h)hover=i})});
-C.addEventListener("mouseleave",()=>hover=-1);
-C.addEventListener("click",()=>{if(hover<0||!selected)return;let t=tiles[hover],d=defs[selected];if(t.type){toast("THAT SITE IS ALREADY OCCUPIED");return}if(st.credits<d.cost){toast("NOT ENOUGH CREDITS");return}t.type=selected;st.credits-=d.cost;st.power+=d.power;st.builds.push(selected);log("Constructed "+d.name+" // -"+d.cost+" credits");if(selected==="hub"){st.hub=true;st.knowledge+=30;log("Learning Hub online.");setTimeout(()=>document.getElementById("win").classList.add("open"),700)}selected=null;document.querySelectorAll(".card").forEach(x=>x.classList.remove("selected"));if(st.power>=100&&st.mission===1){log("Renewable grid requirement achieved.");toast("MISSION 01 COMPLETE — AI TERMINAL UNLOCKED")}update()});
-document.getElementById("begin").onclick=()=>{document.getElementById("intro").classList.remove("open");toast("MISSION 01: BUILD 100 POWER")};
-document.getElementById("reset").onclick=()=>location.reload();
-document.getElementById("aiBtn").onclick=()=>document.getElementById("aiModal").classList.add("open");
-document.getElementById("closeAI").onclick=()=>document.getElementById("aiModal").classList.remove("open");
-document.getElementById("analyze").onclick=()=>{let t=document.getElementById("prompt").value.toLowerCase(),score=0,found=[];let tests=[["ROLE",/(act as|you are|architect|designer|engineer|expert)/],["TASK",/(design|create|plan|build|develop)/],["CONTEXT",/(colony|2086|student|learning|school|community|future)/],["CONSTRAINTS",/(must|include|limit|budget|sustainable|accessible|safe|constraint|energy)/],["OUTPUT",/(list|table|plan|steps|layout|blueprint|format|proposal)/]];tests.forEach(a=>{if(a[1].test(t)){score+=20;found.push(a[0])}});if(t.trim().length<60)score=Math.min(score,60);document.getElementById("analysis").innerHTML='<p>Prompt score: <span class="bigscore">'+score+'</span>/100</p><p>Detected: '+(found.join(" • ")||"none")+'</p>';if(score>=80&&!st.ai){st.ai=true;st.knowledge+=score;log("AI Engineer activated // prompt score "+score);toast("MISSION 02 COMPLETE — LEARNING HUB UNLOCKED");update();setTimeout(()=>document.getElementById("aiModal").classList.remove("open"),1100)}};
-update();requestAnimationFrame(draw);
+const DATA={
+auto:{title:"TRANSPORTATION TECHNOLOGY",role:"ROLE // EV SERVICE TECHNICIAN",job:"Work Order: Rover 4 Power Loss",objectiveTitle:"DIAGNOSE BEFORE YOU REPLACE",objective:"A customer reports power loss during acceleration. Gather the available evidence, use AI as a diagnostic assistant, verify its recommendation, and choose the safest next action.",scenario:"Colony Rover 4 loses power under heavy acceleration. A previous technician suggested replacing the traction battery immediately. Replacement would cost 8,400 credits.",evidence:[
+["Diagnostic Scan","Code P0A80 is stored. No isolation fault codes are present."],["Live Sensor Data","Battery temperature reaches 117°F during heavy acceleration."],["Service History","Battery cooling system was serviced three days ago."]],good:["p0a80","117","cooling"],ai:"Based on the evidence provided, the battery may be degraded, but the elevated temperature and recent cooling-system service make cooling airflow and sensor checks appropriate before authorizing a battery replacement.",choices:[["Replace the traction battery immediately.",false],["Inspect and test the battery cooling system and verify sensor readings before replacing components.",true],["Clear the code and return the vehicle to service.",false]],lesson:"The strongest decision used diagnostic evidence to test a likely cause before authorizing an expensive repair. AI supported the process, but the technician remained responsible for verification."},
+construction:{title:"CONSTRUCTION & SKILLED TRADES",role:"ROLE // ELECTRICAL APPRENTICE",job:"Work Order: Learning Lab Equipment Circuit",objectiveTitle:"DESIGN A SAFE INSTALLATION",objective:"Review the equipment requirements before using AI to recommend an installation plan. Verify the recommendation against the provided specifications.",scenario:"A fabrication lab is adding a new training machine. The supervisor asks you to prepare the installation plan before work begins.",evidence:[
+["Equipment Nameplate","240 V, 32 A maximum operating current."],["Manufacturer Requirement","Dedicated 40 A branch circuit required."],["Project Constraint","Cable run is approximately 55 feet. Installation must follow applicable electrical requirements and supervisor approval."]],good:["240","32","40","55"],ai:"The manufacturer explicitly requires a dedicated 40 A branch circuit. Use that requirement as a project constraint and have conductor size, protection, wiring method, and local code compliance verified by the qualified supervisor before installation.",choices:[["Install a 30 A circuit because normal current is only 32 A.",false],["Plan around the manufacturer's dedicated 40 A requirement and have the installation details verified before work.",true],["Use any available circuit as long as the machine powers on.",false]],lesson:"The equipment specification is authoritative for this simulation. AI can help organize a plan, but it should not override manufacturer requirements, applicable codes, or qualified supervision."},
+business:{title:"BUSINESS & ENTREPRENEURSHIP",role:"ROLE // MARKETING ASSOCIATE",job:"Campaign Review: Solar Backpack",objectiveTitle:"MARKET WITHOUT INVENTING CLAIMS",objective:"Review the product evidence, use AI to draft or evaluate messaging, and decide what claims can responsibly be published.",scenario:"Your startup is launching a solar-powered student backpack. An AI-generated advertisement claims it can 'fully charge any laptop in 20 minutes.' The campaign launches tomorrow.",evidence:[
+["Product Test","Average phone recharge: 2.5 hours in strong sunlight."],["Engineering Note","Laptop charging depends on device, battery size, sunlight, and optional power-bank configuration."],["Marketing Draft","AI copy says: 'Fully charge ANY laptop in just 20 minutes — guaranteed.'"]],good:["2.5","depends","20","guaranteed"],ai:"The proposed 20-minute universal laptop claim is not supported by the supplied test data. A safer campaign should use verified performance information and clearly state relevant conditions or limitations.",choices:[["Publish the AI advertisement because it sounds compelling.",false],["Revise the campaign to use only claims supported by testing and disclose important conditions.",true],["Remove all product performance information from the campaign.",false]],lesson:"Generative AI can produce persuasive language that is not supported by evidence. Workplace AI literacy includes checking claims before they reach customers."},
+ag:{title:"AGRICULTURE & ENVIRONMENTAL SYSTEMS",role:"ROLE // GREENHOUSE TECHNICIAN",job:"Greenhouse Alert: Lettuce Yield Decline",objectiveTitle:"USE DATA BEFORE TREATMENT",objective:"Examine greenhouse data, ask AI to help identify likely causes, then choose what should be checked before changing the crop treatment.",scenario:"Lettuce growth has slowed in Greenhouse Bay 3. A coworker suggests immediately increasing fertilizer concentration.",evidence:[
+["Nutrient Sensor","EC is within the target range for the current crop plan."],["Climate Sensor","Daytime root-zone temperature has risen 8°F over the normal range."],["System Log","Cooling circulation pump shows intermittent flow warnings."]],good:["ec","8","temperature","pump","flow"],ai:"The nutrient reading does not currently indicate a fertilizer shortage. The elevated root-zone temperature and intermittent cooling-flow warnings should be investigated before changing nutrient concentration.",choices:[["Increase fertilizer immediately.",false],["Inspect cooling circulation and confirm root-zone temperature before changing the nutrient plan.",true],["Ignore the sensor data and wait a week.",false]],lesson:"AI is more useful when supplied with relevant sensor evidence. The professional still verifies the physical system before changing production inputs."}
+};
+let key=null,d=null,seen=new Set(),asked=false,usedCoach=false,aiScore=0,verification=0;
+const $=id=>document.getElementById(id);
+function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));$(id).classList.add("active")}
+document.querySelectorAll(".career").forEach(c=>c.onclick=()=>start(c.dataset.career));
+function start(k){key=k;d=DATA[k];seen=new Set();asked=false;usedCoach=false;aiScore=0;verification=0;$("careerTitle").textContent=d.title;$("role").textContent=d.role;$("jobTitle").textContent=d.job;$("scenario").textContent=d.scenario;$("objectiveTitle").textContent=d.objectiveTitle;$("objective").textContent=d.objective;$("prompt").value="";$("promptfeedback").textContent="";$("chat").innerHTML='<div class="bubble bot">I can help analyze the problem, but I only know what you tell me. Gather evidence and give me the relevant details.</div>';$("evidence").innerHTML="";d.evidence.forEach((e,i)=>{let x=document.createElement("div");x.className="evidence";x.innerHTML="<b>"+e[0]+"</b><span>CLICK TO INSPECT</span>";x.onclick=()=>{seen.add(i);x.classList.add("seen");x.innerHTML="<b>"+e[0]+"</b><span>"+e[1]+"</span>";update()};$("evidence").appendChild(x)});$("choices").innerHTML="";d.choices.forEach((c,i)=>{let b=document.createElement("button");b.textContent=c[0];b.onclick=()=>decide(c[1]);$("choices").appendChild(b)});update();show("sim")}
+function update(){$("evcount").textContent=seen.size+"/3";verification=Math.round(seen.size/3*100);$("verifybar").style.width=verification+"%";$("aibar").style.width=aiScore+"%";$("techbar").style.width=(seen.size?Math.min(70,seen.size*23):0)+"%";$("judgebar").style.width="0%";$("xp").textContent=Math.round((verification+aiScore)/4)}
+$("hint").onclick=()=>{usedCoach=true;$("promptfeedback").innerHTML="PROMPT COACH: Tell the AI <b>what job you need done</b>, then include the <b>specific evidence</b> you gathered, any important <b>limits</b>, and what kind of <b>answer</b> would help you make a decision."};
+$("ask").onclick=()=>{let t=$("prompt").value.trim(),low=t.toLowerCase();if(t.length<15){$("promptfeedback").textContent="Give the AI more information about the workplace problem first.";return}let hits=d.good.filter(w=>low.includes(w)).length;let hasTask=/(diagnos|analy|recommend|plan|evaluate|review|identify|help|determine|inspect)/.test(low);let hasOutput=/(steps|list|procedure|recommendation|plan|checklist|table|first|before)/.test(low);aiScore=Math.min(100,hits*15+(hasTask?20:0)+(hasOutput?15:0)+(t.length>100?10:0));let u=document.createElement("div");u.className="bubble user";u.textContent=t;$("chat").appendChild(u);let b=document.createElement("div");b.className="bubble bot";if(seen.size<2||hits<1)b.textContent="I can offer possibilities, but I don't have enough specific evidence to make this useful. What measurements, specifications, history, or constraints can you provide?";else b.textContent=d.ai;$("chat").appendChild(b);asked=true;$("promptfeedback").textContent=aiScore>=70?"Strong workplace request: you gave the AI useful evidence and direction.":"Useful start. Improve it by including more of the evidence and telling the AI exactly what you need from it.";update();$("chat").scrollTop=$("chat").scrollHeight};
+function decide(correct){let tech=correct?100:35,judge=correct?100:25;if(!asked){aiScore=Math.max(aiScore,20)}let verify=verification;if(correct&&seen.size<2){tech=75;judge=70} $("techbar").style.width=tech+"%";$("judgebar").style.width=judge+"%";$("rtech").textContent=tech+"%";$("rai").textContent=aiScore+"%";$("rverify").textContent=verify+"%";$("rjudge").textContent=judge+"%";let overall=Math.round((tech+aiScore+verify+judge)/4);$("reportTitle").textContent=correct?"WORK ORDER COMPLETE":"DECISION REVIEW";$("reportmsg").innerHTML=d.lesson+"<br><br><b>Overall Future Ready performance: "+overall+"%</b>"+(usedCoach?"<br>Prompt Coach was used during this attempt.":"");$("debrief").classList.add("open")}
+$("retry").onclick=()=>{$("debrief").classList.remove("open");start(key)};$("careerCenter").onclick=()=>{$("debrief").classList.remove("open");show("home")};$("back").onclick=()=>show("home");
 })();
 </script>
 </body></html>
