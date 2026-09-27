@@ -10,9 +10,37 @@
 <label>WORK SHIRT<select id="shirt"><option value="#176080">Tech Blue</option><option value="#315b3d">Field Green</option><option value="#65384d">Burgundy</option><option value="#444b55">Charcoal</option><option value="#704d22">Work Tan</option></select></label>
 <label>HAIR STYLE<select id="hairStyle"><option value="standard">Standard</option><option value="short">Short</option><option value="full">Full</option><option value="none">No visible hair</option></select></label></div>
 <h3>STARTING GEAR</h3><div class="gear"><label><input id="helmetChk" type="checkbox"> Head protection</label><label><input id="glassesChk" type="checkbox"> Safety glasses</label><label><input id="vestChk" type="checkbox"> Safety vest</label></div>
-<p class="note">Gear is part of your saved professional identity. Specific work orders may still require additional PPE or training.</p><button class="btn" id="save">SAVE PROFESSIONAL & ENTER CAREER CENTER</button></div></div>
+<p class="note">Gear is part of your saved professional identity. Specific work orders may still require additional PPE or training.</p><button class="btn" type="button" id="save">SAVE PROFESSIONAL & ENTER CAREER CENTER</button></div></div>
 <script src="js/storage.js"></script><script>
-let p=FR.get(),av=p.avatar||{};name.value=p.name||"";style.value=p.style||"Practical problem solver";skin.value=av.skin||"#b97952";hair.value=av.hair||"#34251f";shirt.value=av.shirt||"#176080";hairStyle.value=av.hairStyle||"standard";helmetChk.checked=!!av.helmet;glassesChk.checked=!!av.glasses;vestChk.checked=!!av.vest;
-function render(){document.documentElement.style.setProperty("--skin",skin.value);document.documentElement.style.setProperty("--hair",hair.value);document.documentElement.style.setProperty("--shirt",shirt.value);document.querySelector(".helmet").style.display=helmetChk.checked?"block":"none";document.querySelector(".glasses").style.display=glassesChk.checked?"block":"none";document.querySelector(".vest").style.display=vestChk.checked?"block":"none";let h=document.querySelector(".hair");h.style.display=hairStyle.value==="none"?"none":"block";h.style.height=hairStyle.value==="short"?"28px":hairStyle.value==="full"?"60px":"48px"}[skin,hair,shirt,hairStyle,helmetChk,glassesChk,vestChk].forEach(x=>x.onchange=render);render();
-save.onclick=()=>{FR.patch({name:name.value.trim()||"Future Ready Student",style:style.value,avatar:{skin:skin.value,hair:hair.value,shirt:shirt.value,hairStyle:hairStyle.value,helmet:helmetChk.checked,glasses:glassesChk.checked,vest:vestChk.checked}});location.href="career-center.html"}
+document.addEventListener("DOMContentLoaded",function(){
+ const $=id=>document.getElementById(id);
+ const els={name:$("name"),style:$("style"),skin:$("skin"),hair:$("hair"),shirt:$("shirt"),hairStyle:$("hairStyle"),helmet:$("helmetChk"),glasses:$("glassesChk"),vest:$("vestChk"),save:$("save")};
+ let p=FR.get()||{},av=p.avatar||{};
+ els.name.value=p.name||""; els.style.value=p.style||"Practical problem solver";
+ els.skin.value=av.skin||"#b97952"; els.hair.value=av.hair||"#34251f"; els.shirt.value=av.shirt||"#176080"; els.hairStyle.value=av.hairStyle||"standard";
+ els.helmet.checked=!!av.helmet; els.glasses.checked=!!av.glasses; els.vest.checked=!!av.vest;
+ function render(){
+  document.documentElement.style.setProperty("--skin",els.skin.value);
+  document.documentElement.style.setProperty("--hair",els.hair.value);
+  document.documentElement.style.setProperty("--shirt",els.shirt.value);
+  document.querySelector(".helmet").style.display=els.helmet.checked?"block":"none";
+  document.querySelector(".glasses").style.display=els.glasses.checked?"block":"none";
+  document.querySelector(".vest").style.display=els.vest.checked?"block":"none";
+  let h=document.querySelector(".hair"); h.style.display=els.hairStyle.value==="none"?"none":"block";
+  h.style.height=els.hairStyle.value==="short"?"28px":els.hairStyle.value==="full"?"60px":"48px";
+ }
+ [els.skin,els.hair,els.shirt,els.hairStyle,els.helmet,els.glasses,els.vest].forEach(x=>x.addEventListener("change",render)); render();
+ els.save.addEventListener("click",function(){
+  const data={name:els.name.value.trim()||"Future Ready Student",style:els.style.value,avatar:{skin:els.skin.value,hair:els.hair.value,shirt:els.shirt.value,hairStyle:els.hairStyle.value,helmet:els.helmet.checked,glasses:els.glasses.checked,vest:els.vest.checked}};
+  try{
+   FR.patch(data);
+   const check=FR.get();
+   if(!check || !check.avatar) throw new Error("Profile did not persist");
+   window.location.href="career-center.html";
+  }catch(err){
+   alert("Your professional could not be saved. Please make sure browser storage is enabled, then try again.\n\n"+err.message);
+   console.error(err);
+  }
+ });
+});
 </script></body></html>
