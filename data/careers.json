@@ -1,0 +1,6 @@
+[
+{"id":"auto","name":"Transportation Technology","icon":"⚙️","role":"EV Service Technician","description":"Diagnostics, EV systems, service information and professional judgment."},
+{"id":"construction","name":"Construction & Skilled Trades","icon":"🏗️","role":"Electrical Apprentice","description":"Plans, specifications, safety, estimating and troubleshooting."},
+{"id":"business","name":"Business & Entrepreneurship","icon":"📊","role":"Marketing Associate","description":"Marketing, finance, customer communication and responsible AI use."},
+{"id":"ag","name":"Agriculture & Environmental Systems","icon":"🌱","role":"Greenhouse Technician","description":"Sensors, production systems, plant science and environmental controls."}
+]
