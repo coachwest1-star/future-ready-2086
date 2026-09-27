@@ -57,7 +57,7 @@
 <body>
 <div id="app">
 <header>
-  <div class="brand"><div class="logo">FR</div><div><h1>FUTURE READY 2086</h1><small>COLONY 7 // TRAINING SIMULATION</small></div></div>
+  <div class="brand"><div class="logo">FR</div><div><h1>FUTURE READY 2086</h1><small>COLONY 7 // TRAINING SIMULATION // BUILD 3</small></div></div>
   <div class="stats"><div class="stat"><b id="energy">20</b>ENERGY</div><div class="stat"><b id="credits">0</b>CREDITS</div><div class="stat"><b id="knowledge">0</b>KNOWLEDGE</div></div>
 </header>
 <main>
@@ -83,6 +83,7 @@
  <p>A solar storm has disabled the colony's automated systems. Your team must restore power, repair the AI command system, and reopen the colony gate.</p>
  <p><b>Explore the room.</b> Move close to equipment and interact with it. Look for anything glowing.</p>
  <p style="font-size:13px;color:#8da7bb">Controls: WASD or arrow keys to move • E/Space to interact • You can also click glowing equipment.</p>
+ <div id="engineStatus" style="margin:14px auto;color:#ffd85c;font-size:12px;letter-spacing:2px">INITIALIZING GAME ENGINE…</div>
  <button id="beginMissionBtn" type="button">BEGIN MISSION</button></div>
 </div>
 
@@ -198,19 +199,57 @@ function loop(ts){let dt=Math.min((ts-last)/1000,.03);last=ts;if(!document.query
  if(dx||dy){let l=Math.hypot(dx,dy);player.x+=dx/l*player.speed*dt;player.y+=dy/l*player.speed*dt;player.x=Math.max(25,Math.min(W-25,player.x));player.y=Math.max(25,Math.min(H-25,player.y))}
  } draw();requestAnimationFrame(loop)}
 
-// Robust controls for local-file / browser preview environments.
-document.getElementById('beginMissionBtn').addEventListener('click', function(e){
-  e.preventDefault();
-  closeStart();
-  canvas.focus();
+// ---- Defensive startup / Firefox + Chrome compatible ----
+function showFatalError(message){
+  var status = document.getElementById('engineStatus');
+  if(status){
+    status.style.color='#ff6577';
+    status.textContent='GAME ERROR: '+message;
+  }
+}
+window.addEventListener('error', function(ev){
+  showFatalError(ev.message || 'Unknown JavaScript error');
 });
-document.getElementById('resetBtn').addEventListener('click', function(e){
-  e.preventDefault();
-  resetGame();
-});
-canvas.setAttribute('tabindex','0');
 
-updateUI();requestAnimationFrame(loop);
+function beginMission(){
+  var intro = document.getElementById('start');
+  if(intro) intro.style.display='none';
+  try {
+    canvas.focus();
+    log('Mission started. Search the habitat for power components.');
+  } catch(err) {
+    console.error(err);
+  }
+}
+
+(function boot(){
+  try{
+    var begin = document.getElementById('beginMissionBtn');
+    var reset = document.getElementById('resetBtn');
+    if(!begin) throw new Error('Begin Mission button not found');
+    begin.onclick = function(ev){
+      if(ev) ev.preventDefault();
+      beginMission();
+      return false;
+    };
+    if(reset) reset.onclick = function(ev){
+      if(ev) ev.preventDefault();
+      resetGame();
+      return false;
+    };
+    canvas.setAttribute('tabindex','0');
+    updateUI();
+    var status=document.getElementById('engineStatus');
+    if(status){
+      status.style.color='#62ffb0';
+      status.textContent='● GAME ENGINE READY';
+    }
+    requestAnimationFrame(loop);
+  }catch(err){
+    console.error(err);
+    showFatalError(err.message || String(err));
+  }
+})();
 </script>
 </body>
 </html>
